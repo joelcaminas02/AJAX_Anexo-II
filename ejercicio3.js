@@ -1,47 +1,29 @@
-let XMLHttpRequestObject = false
-
-if (window.XMLHttpRequest){
-  XMLHttpRequestObject = new XMLHttpRequest()
+var XMLHttpRequestObject = false;
+if (window.XMLHttpRequest) {
+    XMLHttpRequestObject = new XMLHttpRequest();
 } else if (window.ActiveXObject) {
-  XMLHttpRequestObject = new ActiveXObject('Microsoft.XMLHTTP')
+    XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
 }
 
-const btnSubmit = document.getElementById("btnSubmit")
-const inputEmail = document.getElementById("emailId")
-const content = document.getElementById("content")
-
-const Listener = (url) => {
-
-  if(XMLHttpRequestObject) {
-    XMLHttpRequestObject.onreadystatechange = function () {
-
-    if (XMLHttpRequestObject.readyState == 4 && XMLHttpRequestObject.status == 200 ) {
-      content.innerHTML = XMLHttpRequestObject.responseText
+function sacardatos(){
+    if(XMLHttpRequestObject) {
+        var lugar = document.getElementById("contenedor");
+        XMLHttpRequestObject.open("POST", 'ejercicio3.php', true);
+        XMLHttpRequestObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        emailValue = document.getElementById('email').value;
+        let urlValue = "email=" + emailValue;
+        XMLHttpRequestObject.send(urlValue);
+        XMLHttpRequestObject.onreadystatechange = function(){
+        if (XMLHttpRequestObject.readyState == 4 &&
+        XMLHttpRequestObject.status == 200) {
+        
+        lugar.innerHTML = XMLHttpRequestObject.responseText;
     }
-  }
-    console.log(url);
-    XMLHttpRequestObject.open("POST", url , true)
-    XMLHttpRequestObject.send()
-  }
-
+    
 }
-
-const checkSubmit = (event) => {
-  let emailValue = inputEmail.value
-  let urlValue = "ejercicio3.php" + "?" + "email=" + emailValue;
-
-  if (emailValue == "" || emailValue == null) {
-    if (event.preventDefault) {
-      event.preventDefault();
-    } else {
-      event.returnValue = false;
     }
-  } else {
-    Listener(urlValue);
-  }
 }
 
-//////
-btnSubmit.addEventListener("click", event => {
-  checkSubmit(event);
-})
+window.onload = function () {
+    document.getElementById('boton').onclick = sacardatos;
+}
